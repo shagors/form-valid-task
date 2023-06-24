@@ -24,7 +24,8 @@ const Login = () => {
       axios
         .post("http://localhost:5000/login", values)
         .then((res) => {
-          if (res.data === "Success") {
+          if (res.data.Login) {
+            localStorage.setItem("token", res.data.token);
             navigate("/home");
           } else {
             alert("No record Found");
