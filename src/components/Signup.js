@@ -21,20 +21,22 @@ const Signup = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors(Validation(values));
+    // data send to server command
     if (errors.name === "" && errors.email === "" && errors.password === "") {
       axios
         .post("http://localhost:5000/signup", values)
         .then((res) => {
           navigate("/");
+          alert("Your account has been created");
         })
         .catch((error) => {
-          console.log(error);
+          alert("Your error is :", error);
         });
     }
   };
   return (
     <div className="d-flex justify-content-center align-items-center bg-info vh-100">
-      <div className="bg-white p-3 rounded w-50">
+      <div className="bg-white p-3 rounded w-25">
         <h2 className="text-center">Sign Up</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">

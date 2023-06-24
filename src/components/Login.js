@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Validation from "./LoginValidation";
+import axios from "axios";
 
 const Login = () => {
   const [values, setValues] = useState({
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
 
   const [errors, setErrors] = useState({});
 
@@ -17,12 +19,26 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors(Validation(values));
-    console.log(values);
+    // data get from api command
+    if (errors.email === "" && errors.password === "") {
+      axios
+        .get("http://localhost:5000/login", values)
+        .then((res) => {
+          if (res.data === "Success") {
+            navigate("/home");
+          } else {
+            alert("No record Found");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   return (
     <div className="d-flex justify-content-center align-items-center bg-info vh-100">
-      <div className="bg-white p-3 rounded w-50">
+      <div className="bg-white p-3 rounded w-25">
         <h2 className="text-center">Log In</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
