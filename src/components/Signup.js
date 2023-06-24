@@ -1,22 +1,56 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import Validation from "./SignupValidation";
+import axios from "axios";
 
 const Signup = () => {
+  const [values, setValues] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const navigate = useNavigate();
+
+  const [errors, setErrors] = useState({});
+
+  const handleInput = (e) => {
+    setValues((prev) => ({ ...prev, [e.target.name]: [e.target.value] }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setErrors(Validation(values));
+    if (errors.name === "" && errors.email === "" && errors.password === "") {
+      axios
+        .post("http://localhost:5000/signup", values)
+        .then((res) => {
+          navigate("/");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
   return (
     <div className="d-flex justify-content-center align-items-center bg-info vh-100">
       <div className="bg-white p-3 rounded w-50">
         <h2 className="text-center">Sign Up</h2>
-        <form action="">
+        <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label htmlFor="name">
               <strong>Name</strong>
             </label>
             <input
               type="text"
-              required
+              name="name"
               placeholder="Enter Your Name"
               className="form-control rounded-0"
+              onChange={handleInput}
             />
+            {errors.name && (
+              <span className="text-danger text-center">{errors.name}</span>
+            )}
           </div>
           <div className="mb-3">
             <label htmlFor="email">
@@ -24,10 +58,14 @@ const Signup = () => {
             </label>
             <input
               type="email"
-              required
+              name="email"
               placeholder="Enter Your Email"
               className="form-control rounded-0"
+              onChange={handleInput}
             />
+            {errors.email && (
+              <span className="text-danger text-center">{errors.email}</span>
+            )}
           </div>
           <div className="mb-3">
             <label htmlFor="password">
@@ -35,16 +73,20 @@ const Signup = () => {
             </label>
             <input
               type="password"
-              required
+              name="password"
               placeholder="Enter Your Password"
               className="form-control rounded-0"
+              onChange={handleInput}
             />
+            {errors.password && (
+              <span className="text-danger text-center">{errors.password}</span>
+            )}
           </div>
           <button className="btn btn-success w-100">Sign Up</button>
           <p className="text-center mt-3">
             Are you agree to our terms and conditions
           </p>
-          <p className="text-center">
+          <p className="text-center" type="submit">
             Already have an account ?
             <Link to="/" className="">
               Sign In

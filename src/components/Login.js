@@ -17,6 +17,7 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors(Validation(values));
+    console.log(values);
   };
 
   return (
