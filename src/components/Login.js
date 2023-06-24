@@ -22,7 +22,7 @@ const Login = () => {
     // data get from api command
     if (errors.email === "" && errors.password === "") {
       axios
-        .get("http://localhost:5000/login", values)
+        .post("http://localhost:5000/login", values)
         .then((res) => {
           if (res.data === "Success") {
             navigate("/home");
