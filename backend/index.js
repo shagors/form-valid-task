@@ -1,12 +1,29 @@
-const express = require("express");
-const mysql = require("mysql");
-const cors = require("cors");
+import express, { json } from "express";
+import { createConnection } from "mysql";
+import cors from "cors";
+import jwt from "jsonwebtoken";
 
 const app = express();
-app.use(express.json());
+app.use(json());
 app.use(cors());
 
-const db = mysql.createConnection({
+const verifyJwt = (req, res, next) => {
+  const token = req.headers["access-token"];
+  if (!token) {
+    return res.json("You are not authorized person");
+  } else {
+    jwt.verify(token, "jwtSecretKey", (error, decode) => {
+      if (error) {
+        res.json("Not Authonticated");
+      } else {
+        req.userId = decode.id;
+        next();
+      }
+    });
+  }
+};
+
+const db = createConnection({
   host: "localhost",
   user: "root",
   password: "",
@@ -25,6 +42,10 @@ app.post("/signup", (req, res) => {
   });
 });
 
+app.get("/checkauth", verifyJwt, (req, res) => {
+  return res.json("Authen");
+});
+
 // data send to frontend api
 app.post("/login", (req, res) => {
   const sql = "SELECT * FROM login WHERE `email` = ? AND `password` = ?";
@@ -33,7 +54,9 @@ app.post("/login", (req, res) => {
       return res.json("Error");
     }
     if (data.length > 0) {
-      return res.json("Success");
+      const id = data[0].id;
+      const token = jwt.sign({ id }, "jwtSecretKey", { expiresIn: 300 });
+      return res.json({ Login: true, token, data });
     } else {
       return res.json("Failed");
     }
