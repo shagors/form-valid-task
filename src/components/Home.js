@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import "../App.css";
 
@@ -16,14 +16,15 @@ const Home = () => {
   console.log(data);
 
   // data delete api call
-  const handleDelete = (id) => {
-    axios
+  const handleDelete = async (id) => {
+    await axios
       .delete("http://localhost:5000/delete/" + id)
       .then((res) => {
-        useLocation.reload();
+        window.location.reload();
       })
       .catch((error) => console.log(error));
   };
+
   return (
     <div
       className="vh-100 d-flex justify-content-center align-items-center"
