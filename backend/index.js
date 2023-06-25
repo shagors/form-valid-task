@@ -106,7 +106,7 @@ app.put("/update/:id", (req, res) => {
 });
 
 // Delete api for user delete
-app.delete("delete/:id", (req, res) => {
+app.delete("/delete/:id", (req, res) => {
   const sql = "DELETE FROM login WHERE id = ?";
   const id = req.params.id;
   db.query(sql, [id], (error, result) => {
