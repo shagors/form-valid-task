@@ -1,17 +1,29 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import "../App.css";
 
 const Home = () => {
   const [data, setData] = useState([]);
+
+  // data get from api and show in table
   useEffect(() => {
     axios
       .get("http://localhost:5000/home")
       .then((res) => setData(res?.data))
       .catch((error) => console.log(error));
   }, []);
-  // console.log(data);
+  console.log(data);
+
+  // data delete api call
+  const handleDelete = (id) => {
+    axios
+      .delete("http://localhost:5000/delete/" + id)
+      .then((res) => {
+        useLocation.reload();
+      })
+      .catch((error) => console.log(error));
+  };
   return (
     <div
       className="vh-100 d-flex justify-content-center align-items-center"
@@ -50,7 +62,11 @@ const Home = () => {
                       className="btn btn-sm btn-primary mx-2">
                       Edit
                     </Link>
-                    <button className="btn btn-sm btn-danger">Delete</button>
+                    <button
+                      onClick={() => handleDelete(data?.id)}
+                      className="btn btn-sm btn-danger">
+                      Delete
+                    </button>
                   </td>
                 </tr>
               );
