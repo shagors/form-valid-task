@@ -94,7 +94,7 @@ app.get("/read/:id", (req, res) => {
   });
 });
 
-// Update api
+// Update api user data update
 
 app.put("/update/:id", (req, res) => {
   const sql = "UPDATE login SET `name` = ? , `email` = ? WHERE id=?";
@@ -104,6 +104,17 @@ app.put("/update/:id", (req, res) => {
     return res.json(result);
   });
 });
+
+// Delete api for user delete
+app.delete("delete/:id", (req, res) => {
+  const sql = "DELETE FROM login WHERE id = ?";
+  const id = req.params.id;
+  db.query(sql, [id], (error, result) => {
+    if (error) return res.json({ Message: "Something wrong Occured" });
+    return res.json(result);
+  });
+});
+
 // for test
 
 app.listen(5000, () => {
