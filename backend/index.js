@@ -77,6 +77,17 @@ app.get("/home", (req, res) => {
   });
 });
 
+// single id read and show api
+app.get("/read/:id", (req, res) => {
+  const sql = "SELECT * FROM login WHERE id = ?";
+  const id = req.params.id;
+
+  db.query(sql, [id], (error, result) => {
+    if (error) return res.json({ Message: "Something wrong Occured" });
+    return res.json(result);
+  });
+});
+
 // for test
 app.listen(5000, () => {
   console.log("Port is connected");
