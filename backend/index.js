@@ -67,6 +67,16 @@ app.post("/login", (req, res) => {
     }
   });
 });
+
+// data send to frontend and show data api
+app.get("/home", (req, res) => {
+  const sql = "SELECT * FROM login";
+  db.query(sql, (error, result) => {
+    if (error) return res.json({ Message: "Something wrong Occured" });
+    return res.json(result);
+  });
+});
+
 // for test
 app.listen(5000, () => {
   console.log("Port is connected");
