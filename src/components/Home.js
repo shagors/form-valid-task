@@ -5,7 +5,7 @@ import "../App.css";
 
 const Home = () => {
   const [data, setData] = useState([]);
-
+  // console.log(data);
   // data get from api and show in table
   useEffect(() => {
     axios
@@ -13,12 +13,13 @@ const Home = () => {
       .then((res) => setData(res?.data))
       .catch((error) => console.log(error));
   }, []);
-  console.log(data);
+  // console.log(data);
 
   // data delete api call
   const handleDelete = async (id) => {
+    console.log(id);
     await axios
-      .delete("http://localhost:5000/delete/" + id)
+      .delete(`http://localhost:5000/delete/${id}`)
       .then((res) => {
         window.location.reload();
       })
@@ -64,7 +65,7 @@ const Home = () => {
                       Edit
                     </Link>
                     <button
-                      onClick={() => handleDelete(data?.id)}
+                      onClick={() => handleDelete(user.id)}
                       className="btn btn-sm btn-danger">
                       Delete
                     </button>
