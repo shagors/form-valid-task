@@ -1,21 +1,28 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
+import "../App.css";
 
 const Home = () => {
   const [data, setData] = useState([]);
   useEffect(() => {
     axios
       .get("http://localhost:5000/home")
-      .then((res) => setData(res.data))
+      .then((res) => setData(res?.data))
       .catch((error) => console.log(error));
   }, []);
-  console.log(data);
+  // console.log(data);
   return (
-    <div className="vh-100 bg-info">
-      <h1 className="text-center text-white fs-1 pt-5 fw-bold">
-        List Of Users
-      </h1>
-      <div className="d-flex vh-100 justify-content-center align-items-center">
+    <div
+      className="vh-100 d-flex justify-content-center align-items-center"
+      style={{ backgroundColor: "#9FE2BF" }}>
+      <div className="bg-white rounded  w-50 p-3">
+        <h1 className="text-center fs-1 fw-bold">List Of Users</h1>
+        <div className="d-flex justify-content-end py-2">
+          <Link to="/signup" className="btn btn-success">
+            Add New User
+          </Link>
+        </div>
         <table>
           <thead>
             <tr>
@@ -33,8 +40,17 @@ const Home = () => {
                   <td>{user.name}</td>
                   <td>{user.email}</td>
                   <td>
-                    <button>Edit</button>
-                    <button>Delete</button>
+                    <Link
+                      to={`/read/${user.id}`}
+                      className="btn btn-sm btn-info">
+                      Read
+                    </Link>
+                    <Link
+                      to={`/edit/${user?.id}`}
+                      className="btn btn-sm btn-primary mx-2">
+                      Edit
+                    </Link>
+                    <button className="btn btn-sm btn-danger">Delete</button>
                   </td>
                 </tr>
               );
