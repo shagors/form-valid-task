@@ -1,9 +1,10 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const Update = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [values, setValues] = useState({
     name: "",
@@ -24,7 +25,19 @@ const Update = () => {
       })
       .then((error) => console.log(error));
   }, []);
-  console.log(values);
+  //   console.log(values);
+
+  // Data update api call for server
+  const handleUpdate = (e) => {
+    e.preventDefault();
+    axios
+      .put("http://localhost:5000/update/" + id, values)
+      .then((res) => {
+        console.log(res);
+        navigate("/home");
+      })
+      .catch((error) => console.log(error));
+  };
 
   return (
     <div
